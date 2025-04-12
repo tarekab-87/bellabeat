@@ -1,0 +1,840 @@
+[33mcommit 0b445d2a76133b1a06f23ff0eb8536d8695d3f8d[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author:     tarekab-87 <glauser.tarek@bluewin.ch>
+AuthorDate: Sat Apr 12 16:53:27 2025 +0200
+Commit:     tarekab-87 <glauser.tarek@bluewin.ch>
+CommitDate: Sat Apr 12 16:53:27 2025 +0200
+
+    Initial commit for Bellabeat analysis
+
+[1mdiff --git a/01_Introduction.md b/01_Introduction.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..07ff386[m
+[1m--- /dev/null[m
+[1m+++ b/01_Introduction.md[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32m## Case Study 2: how can a wellness technology company play it smart? ##[m
+[32m+[m
+[32m+[m[32m**Company name: BellaBeat**[m
+[32m+[m
+[32m+[m[32m**Author: Tarek Abou Ismail**[m
+[32m+[m
+[32m+[m[32m**Date: 05/January/2025**[m
+[32m+[m
+[32m+[m[32m## 📝 Introductoin ##[m
+[32m+[m
+[32m+[m[32mBellabeat is a high-tech company specializing in health-focused smart products designed for women. These products collect valuable data on activity, sleep, stress, and reproductive health, empowering women with insights to better understand their health and habits.[m
+[32m+[m
+[32m+[m[32mAs part of the capstone project for the Google Data Analytics Professional Certificate, this case study aims to address the business question: ***"How are consumers using Bellabeat smart devices?"*** To gain meaningful insights, the project will analyze fitness data from smart devices while following the steps of the data analysis process: ***Ask, Prepare, Process, Analyze, Share,*** and ***Act***.[m
+[1mdiff --git a/02_Data Combining.sql b/02_Data Combining.sql[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9bea421[m
+[1m--- /dev/null[m
+[1m+++ b/02_Data Combining.sql[m	
+[36m@@ -0,0 +1,43 @@[m
+[32m+[m[32m# 🏋️‍♂️ Merging Tables in SQL for Case Study 2[m
+[32m+[m
+[32m+[m[32m## 📌 Overview[m
+[32m+[m[32mThis script merges datasets from two time periods (**03/12/2016 – 04/11/2016** and **04/12/2016 – 05/12/2016**) into unified tables for analysis.[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 🗂 Merge Daily Activity Tables[m
+[32m+[m[32mCombines `daily_activity_1` and `daily_activity_2` into a single `daily_activity` table.[m
+[32m+[m
+[32m+[m[32mCREATE TABLE `spheric-engine-432411-p0.case_study_2.daily_activity` AS[m[41m [m
+[32m+[m[32m([m
+[32m+[m[32m  SELECT * FROM `spheric-engine-432411-p0.case_study_2.daily_activity_1`[m[41m [m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT * FROM `spheric-engine-432411-p0.case_study_2.daily_activity_2`[m[41m [m
+[32m+[m[32m);[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 🗂  Merge Minute-Level Sleep Data[m
+[32m+[m[32mCombines minute_sleep_1_v1 and minute_sleep_2_v1 into a unified minute_sleep table.[m
+[32m+[m
+[32m+[m[32mCREATE TABLE `spheric-engine-432411-p0.case_study_2.minute_sleep` AS[m[41m [m
+[32m+[m[32m([m
+[32m+[m[32m  SELECT * FROM `spheric-engine-432411-p0.case_study_2.minute_sleep_1_v1`[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT * FROM `spheric-engine-432411-p0.case_study_2.minute_sleep_2_v1`[m
+[32m+[m[32m);[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 🗂 Merge Hourly Steps Data[m
+[32m+[m[32mCombines hourly_steps_1 and hourly_steps_2 into a single hourly_steps table for step activity tracking.[m
+[32m+[m
+[32m+[m[32mCREATE TABLE `spheric-engine-432411-p0.case_study_2.hourly_steps` AS[m[41m [m
+[32m+[m[32m([m
+[32m+[m[32m  SELECT * FROM `spheric-engine-432411-p0.case_study_2.hourly_steps_1`[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT * FROM `spheric-engine-432411-p0.case_study_2.hourly_steps_2`[m
+[32m+[m[32m);[m
+[32m+[m
+[32m+[m[41m  [m
+[32m+[m
+[1mdiff --git a/03_Data Exploration.sql b/03_Data Exploration.sql[m
+[1mnew file mode 100644[m
+[1mindex 0000000..743a6ee[m
+[1m--- /dev/null[m
+[1m+++ b/03_Data Exploration.sql[m	
+[36m@@ -0,0 +1,150 @@[m
+[32m+[m[32m# 📊 Data Exploration[m
+[32m+[m
+[32m+[m[32m## 1️⃣ Exploring the `daily_activity` Table[m
+[32m+[m[32m### 1.1 View All Data[m
+[32m+[m[32m```[m[41m  [m
+[32m+[m[32mSELECT * FROM `spheric-engine-432411-p0.case_study_2.daily_activity`;[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### 1.2 Check for Null Values Across Columns[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT[m
+[32m+[m[32m  COUNT(*) - COUNT(Id) AS id_null,[m
+[32m+[m[32m  COUNT(*) - COUNT(ActivityDate) AS activity_date_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(TotalSteps) AS total_steps_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(TotalDistance) AS total_distance_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(TrackerDistance) AS tracker_distance_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(LoggedActivitiesDistance) AS logged_distance_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(VeryActiveDistance) AS very_active_distance_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(ModeratelyActiveDistance) AS moderate_active_distance_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(LightActiveDistance) AS light_active_distance_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(SedentaryActiveDistance) AS sedentary_active_distance_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(VeryActiveMinutes) AS very_active_minute_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(FairlyActiveMinutes) AS fairly_active_minutes_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(LightlyActiveMinutes) AS lightly_active_minutes_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(SedentaryMinutes) AS sedentary_minutes_null_count,[m
+[32m+[m[32m  COUNT(*) - COUNT(Calories) AS calories_null_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.daily_activity`;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **No null values found.**[m
+[32m+[m
+[32m+[m[32m### 1.3 Check for Duplicate Records[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT[m
+[32m+[m[32m  Id, ActivityDate, TotalDistance, TrackerDistance, LoggedActivitiesDistance,[m[41m [m
+[32m+[m[32m  VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance,[m[41m [m
+[32m+[m[32m  SedentaryActiveDistance, VeryActiveMinutes, FairlyActiveMinutes,[m
+[32m+[m[32m  LightlyActiveMinutes, SedentaryMinutes, Calories,[m[41m [m
+[32m+[m[32m  COUNT(*) AS duplicate_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.daily_activity`[m
+[32m+[m[32mGROUP BY[m
+[32m+[m[32m  Id, ActivityDate, TotalDistance, TrackerDistance, LoggedActivitiesDistance,[m[41m [m
+[32m+[m[32m  VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance,[m[41m [m
+[32m+[m[32m  SedentaryActiveDistance, VeryActiveMinutes, FairlyActiveMinutes,[m
+[32m+[m[32m  LightlyActiveMinutes, SedentaryMinutes, Calories[m
+[32m+[m[32mHAVING duplicate_count > 1;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **No duplicate records found.**[m
+[32m+[m
+[32m+[m[32m### 1.4 Check `Id` Column for Data Consistency[m
+[32m+[m[32m```s[m
+[32m+[m[32mSELECT COUNT(*) AS invalid_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.daily_activity`[m
+[32m+[m[32mWHERE SAFE_CAST(Id AS FLOAT64) IS NULL;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **No inconsistencies found.**[m
+[32m+[m
+[32m+[m[32m### 1.5 Check `ActivityDate` Column for Valid Date Range[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT COUNT(*) AS invalid_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.daily_activity`[m
+[32m+[m[32mWHERE NOT ActivityDate BETWEEN DATE('2016-03-12') AND DATE('2016-05-12');[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **All values are within the expected range.**[m
+[32m+[m
+[32m+[m[32m### 1.6 Check for Negative or Null Values in Key Activity Columns[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT column_name, COUNT(*) AS null_or_negative_count FROM ([m
+[32m+[m[32m  SELECT 'TotalSteps' AS column_name, TotalSteps FROM `spheric-engine-432411-p0.case_study_2.daily_activity` WHERE TotalSteps IS NULL OR TotalSteps < 0[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT 'TrackerDistance', TrackerDistance FROM `spheric-engine-432411-p0.case_study_2.daily_activity` WHERE TrackerDistance IS NULL OR TrackerDistance < 0[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT 'LoggedActivitiesDistance', LoggedActivitiesDistance FROM `spheric-engine-432411-p0.case_study_2.daily_activity` WHERE LoggedActivitiesDistance IS NULL OR LoggedActivitiesDistance < 0[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT 'VeryActiveDistance', VeryActiveDistance FROM `spheric-engine-432411-p0.case_study_2.daily_activity` WHERE VeryActiveDistance IS NULL OR VeryActiveDistance < 0[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT 'ModeratelyActiveDistance', ModeratelyActiveDistance FROM `spheric-engine-432411-p0.case_study_2.daily_activity` WHERE ModeratelyActiveDistance IS NULL OR ModeratelyActiveDistance < 0[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT 'LightActiveDistance', LightActiveDistance FROM `spheric-engine-432411-p0.case_study_2.daily_activity` WHERE LightActiveDistance IS NULL OR LightActiveDistance < 0[m
+[32m+[m[32m  UNION ALL[m
+[32m+[m[32m  SELECT 'Calories', Calories FROM `spheric-engine-432411-p0.case_study_2.daily_activity` WHERE Calories IS NULL OR Calories < 0[m
+[32m+[m[32m) AS temp;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **No null or negative values found.**[m
+[32m+[m
+[32m+[m[32m### 1.7 Check for Invalid Records (Sedentary Users with Distance/Steps Logged)[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT COUNT(*) AS invalid_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.daily_activity`[m
+[32m+[m[32mWHERE SedentaryMinutes = 1440 AND TotalDistance <> 0 AND TotalSteps <> 0;[m
+[32m+[m[32m```[m
+[32m+[m[32m⚠️ **17 invalid records found.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 2️⃣ Exploring the `minute_sleep` Table[m
+[32m+[m[32m### 2.1 View All Data[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT * FROM `spheric-engine-432411-p0.case_study_2.minute_sleep`;[m
+[32m+[m[32m```[m
+[32m+[m[32m⚠️ **Date format issue detected (Year 2016 interpreted as 0016).**[m
+[32m+[m
+[32m+[m[32m### 2.2 Check `Id` Column for Validity[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT COUNT(*) AS invalid_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.minute_sleep`[m
+[32m+[m[32mWHERE SAFE_CAST(id AS INT64) IS NULL;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **No invalid records found.**[m
+[32m+[m
+[32m+[m[32m### 2.3 Check for Date Consistency[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT COUNT(*) AS invalid_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.minute_sleep`[m
+[32m+[m[32mWHERE SAFE_CAST(date AS TIMESTAMP) IS NULL;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **No format inconsistencies found.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 3️⃣ Exploring the `hourly_steps` Table[m
+[32m+[m[32m### 3.1 View All Data[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT * FROM `spheric-engine-432411-p0.case_study_2.hourly_steps`;[m
+[32m+[m[32m```[m
+[32m+[m[32m⚠️ **ActivityHour column contains incorrect year format (0016 instead of 2016).**[m
+[32m+[m
+[32m+[m[32m### 3.2 Check for Timestamp Consistency[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT COUNT(*) AS invalid_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.hourly_steps`[m
+[32m+[m[32mWHERE SAFE_CAST(ActivityHour AS TIMESTAMP) IS NULL;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **No inconsistencies found.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## ✅ Summary of Findings[m
+[32m+[m[41m  [m
+[32m+[m[32m| Issue | Status |[m
+[32m+[m[32m|-------|--------|[m
+[32m+[m[32m| Null values in `daily_activity` | ✅ No null values found |[m
+[32m+[m[32m| Duplicate records in `daily_activity` | ✅ No duplicates found |[m
+[32m+[m[32m| Incorrect `Id` values in `daily_activity` | ✅ No issues found |[m
+[32m+[m[32m| Date range validation | ✅ All values are within range |[m
+[32m+[m[32m| Negative values in key columns | ✅ No negative values found |[m
+[32m+[m[32m| Sedentary users logging distance/steps | ⚠️ 17 invalid records found |[m
+[32m+[m[32m| `minute_sleep` table date format issue | ⚠️ Year 2016 imported as 0016 |[m
+[32m+[m[32m| `hourly_steps` incorrect year format | ⚠️ Year 2016 imported as 0016 |[m
+[32m+[m
+[32m+[m[32m---[m
+[1mdiff --git a/04_Data Preparation.sql b/04_Data Preparation.sql[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9be68d8[m
+[1m--- /dev/null[m
+[1m+++ b/04_Data Preparation.sql[m	
+[36m@@ -0,0 +1,153 @@[m
+[32m+[m[32m# 🛠️ Data Preparation[m
+[32m+[m
+[32m+[m[32m## 1️⃣ Creating a Clean Daily Activity Table[m
+[32m+[m[32m**Removing 17 invalid records where users were sedentary but recorded distance and steps.**[m
+[32m+[m[32m```[m
+[32m+[m[32mCREATE TABLE `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned` AS[m[41m [m
+[32m+[m[32m([m
+[32m+[m[32m  SELECT *[m[41m [m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.daily_activity`[m[41m [m
+[32m+[m[32m  WHERE NOT (SedentaryMinutes = 1440 AND TotalDistance <> 0 AND TotalSteps <> 0)[m
+[32m+[m[32m);[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Table `daily_activity_cleaned` created with invalid records removed.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 2️⃣ Creating User Activity Level Tables[m
+[32m+[m[32mUsers are categorized based on **average daily steps** into:[m
+[32m+[m[32m- **Sedentary Active:** `< 5000` steps[m
+[32m+[m[32m- **Lightly Active:** `5000 - 7499` steps[m
+[32m+[m[32m- **Fairly Active:** `7500 - 9999` steps[m
+[32m+[m[32m- **Very Active:** `>= 10000` steps[m
+[32m+[m
+[32m+[m[32m### 📌 Creating `sedentary_users` Table[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH sedentary_users AS ([m
+[32m+[m[32m  SELECT Id, ROUND(AVG(TotalSteps), 2) AS average_steps[m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m  GROUP BY Id[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m[41m [m
+[32m+[m[32m  sedentary_users.Id, tem_table_2.*[m
+[32m+[m[32mFROM sedentary_users[m
+[32m+[m[32mINNER JOIN `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned` AS tem_table_2[m
+[32m+[m[32mON sedentary_users.Id = tem_table_2.Id[m
+[32m+[m[32mWHERE average_steps < 5000;[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### 📌 Creating `light_users` Table[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH light_users AS ([m
+[32m+[m[32m  SELECT Id, ROUND(AVG(TotalSteps), 2) AS average_steps[m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m  GROUP BY Id[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m[41m [m
+[32m+[m[32m  light_users.Id, tem_table_2.*[m
+[32m+[m[32mFROM light_users[m
+[32m+[m[32mINNER JOIN `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned` AS tem_table_2[m
+[32m+[m[32mON light_users.Id = tem_table_2.Id[m
+[32m+[m[32mWHERE average_steps BETWEEN 5000 AND 7499;[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### 📌 Creating `fair_users` Table[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH fair_users AS ([m
+[32m+[m[32m  SELECT Id, ROUND(AVG(TotalSteps), 2) AS average_steps[m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m  GROUP BY Id[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m[41m [m
+[32m+[m[32m  fair_users.Id, tem_table_2.*[m
+[32m+[m[32mFROM fair_users[m
+[32m+[m[32mINNER JOIN `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned` AS tem_table_2[m
+[32m+[m[32mON fair_users.Id = tem_table_2.Id[m
+[32m+[m[32mWHERE average_steps BETWEEN 7500 AND 9999;[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### 📌 Creating `very_active_users` Table[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH very_active_users AS ([m
+[32m+[m[32m  SELECT Id, ROUND(AVG(TotalSteps), 2) AS average_steps[m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m  GROUP BY Id[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m[41m [m
+[32m+[m[32m  very_active_users.Id, tem_table_2.*[m
+[32m+[m[32mFROM very_active_users[m
+[32m+[m[32mINNER JOIN `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned` AS tem_table_2[m
+[32m+[m[32mON very_active_users.Id = tem_table_2.Id[m
+[32m+[m[32mWHERE average_steps >= 10000;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **User categories created successfully.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 3️⃣ Fixing Date Format in `minute_sleep` Table[m
+[32m+[m[32m**Issue:** Year **2016 imported as 0016**[m[41m  [m
+[32m+[m[32m**Fix:** Adding **2000 years** to adjust incorrectly formatted timestamps.[m
+[32m+[m[32m```[m
+[32m+[m[32mUPDATE `spheric-engine-432411-p0.case_study_2.minute_sleep`[m
+[32m+[m[32mSET date = TIMESTAMP(DATETIME_ADD(CAST(date AS DATETIME), INTERVAL 2000 YEAR))[m
+[32m+[m[32mWHERE EXTRACT(YEAR FROM date) < 1900;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Date format corrected in `minute_sleep` table.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 4️⃣ Calculating Average Sleep Minutes Per Weekday[m
+[32m+[m[32m**Objective:** Calculate the **average sleep minutes per day of the week** across all users.[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH week_day_table AS ([m
+[32m+[m[32m    SELECT[m
+[32m+[m[32m      Id,[m
+[32m+[m[32m      EXTRACT(DAYOFWEEK FROM date) AS week_day_num,[m
+[32m+[m[32m      FORMAT_TIMESTAMP('%A', date) AS week_day,[m
+[32m+[m[32m      COUNT(*) AS activity_count[m
+[32m+[m[32m    FROM `spheric-engine-432411-p0.case_study_2.minute_sleep`[m
+[32m+[m[32m    WHERE value = 1[m
+[32m+[m[32m    GROUP BY Id, week_day_num, week_day[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m
+[32m+[m[32m  Id, week_day, week_day_num, AVG(activity_count) AS avg_minute_sleep[m
+[32m+[m[32mFROM week_day_table[m
+[32m+[m[32mGROUP BY Id, week_day, week_day_num[m
+[32m+[m[32mORDER BY week_day_num ASC;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Computed average sleep minutes per weekday.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 5️⃣ Fixing Date Format in `hourly_steps` Table[m
+[32m+[m[32m**Issue:** Year **2016 imported as 0016**[m[41m  [m
+[32m+[m[32m**Fix:** Adding **2000 years** to correct incorrect timestamps.[m
+[32m+[m[32m```[m
+[32m+[m[32mUPDATE `spheric-engine-432411-p0.case_study_2.hourly_steps`[m[41m [m
+[32m+[m[32mSET ActivityHour = TIMESTAMP(DATETIME_ADD(CAST(ActivityHour AS DATETIME), INTERVAL 2000 YEAR))[m
+[32m+[m[32mWHERE EXTRACT(YEAR FROM ActivityHour) < 1900;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Date format corrected in `hourly_steps` table.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 6️⃣ Viewing the Cleaned Data[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT * FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Final cleaned dataset ready for analysis.**[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 🎯 Summary of Fixes & Data Preparation[m
+[32m+[m[41m  [m
+[32m+[m[32m| Task | Status |[m
+[32m+[m[32m|------|--------|[m
+[32m+[m[32m| Removed 17 invalid records from `daily_activity` | ✅ Done |[m
+[32m+[m[32m| Categorized users by activity level | ✅ Done |[m
+[32m+[m[32m| Fixed incorrect year formatting in `minute_sleep` | ✅ Done |[m
+[32m+[m[32m| Computed average sleep minutes per weekday | ✅ Done |[m
+[32m+[m[32m| Fixed incorrect year formatting in `hourly_steps` | ✅ Done |[m
+[32m+[m[32m| Final cleaned dataset is ready for analysis | ✅ Done |[m
+[32m+[m
+[32m+[m[32m---[m
+[1mdiff --git a/05_Data Analysis.sql b/05_Data Analysis.sql[m
+[1mnew file mode 100644[m
+[1mindex 0000000..49be66a[m
+[1m--- /dev/null[m
+[1m+++ b/05_Data Analysis.sql[m	
+[36m@@ -0,0 +1,167 @@[m
+[32m+[m[32m# 📊 Data Analysis[m[41m [m
+[32m+[m
+[32m+[m[32m## 1️⃣ Counting Total Users[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT COUNT(DISTINCT(Id)) AS users_count[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Total Users:** 35[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 2️⃣ Average Daily Steps & Calories Per Weekday[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH week_day_table AS ([m
+[32m+[m[32m    SELECT[m
+[32m+[m[32m      Id,[m
+[32m+[m[32m      TotalSteps,[m
+[32m+[m[32m      Calories,[m
+[32m+[m[32m      FORMAT_TIMESTAMP('%A', ActivityDate) AS week_day,[m
+[32m+[m[32m      EXTRACT(DAYOFWEEK FROM ActivityDate) AS week_day_number[m
+[32m+[m[32m    FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m
+[32m+[m[32m  Id,[m
+[32m+[m[32m  week_day,[m
+[32m+[m[32m  week_day_number,[m
+[32m+[m[32m  ROUND(AVG(TotalSteps), 2) AS avg_daily_steps,[m
+[32m+[m[32m  ROUND(AVG(Calories), 2) AS avg_daily_calories[m
+[32m+[m[32mFROM week_day_table[m
+[32m+[m[32mGROUP BY Id, week_day, week_day_number[m
+[32m+[m[32mORDER BY week_day_number ASC;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Average Daily Steps:** Below recommended range (8000-10000)[m[41m  [m
+[32m+[m[32m✅ **Average Calories Burned:** Within adult range (1200-2400)[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 3️⃣ Categorizing Users by Activity Level[m
+[32m+[m[32m**Classifications:**[m
+[32m+[m[32m- **Sedentary Active:** `< 5000` steps[m
+[32m+[m[32m- **Lightly Active:** `5000 - 7499` steps[m
+[32m+[m[32m- **Fairly Active:** `7500 - 9999` steps[m
+[32m+[m[32m- **Very Active:** `>= 10000` steps[m
+[32m+[m
+[32m+[m[32m### 📝 Method 1: Using CROSS JOIN[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH average_steps_table AS ([m
+[32m+[m[32m    SELECT Id, ROUND(AVG(TotalSteps), 2) AS average_steps[m
+[32m+[m[32m    FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m    WHERE NOT (SedentaryMinutes = 1440 AND TotalDistance = 0 AND TotalSteps = 0)[m
+[32m+[m[32m    GROUP BY Id[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT *[m[41m [m
+[32m+[m[32mFROM ([m
+[32m+[m[32m  SELECT ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM average_steps_table), 2) AS sedentary_active_percentage FROM average_steps_table WHERE average_steps < 5000[m
+[32m+[m[32m) sedentary_active_users[m
+[32m+[m[32mCROSS JOIN ([m
+[32m+[m[32m  SELECT ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM average_steps_table), 2) AS lightly_active_percentage FROM average_steps_table WHERE average_steps BETWEEN 5000 AND 7499[m
+[32m+[m[32m) lightly_active_users[m
+[32m+[m[32mCROSS JOIN ([m
+[32m+[m[32m  SELECT ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM average_steps_table), 2) AS fairly_active_percentage FROM average_steps_table WHERE average_steps BETWEEN 7500 AND 9999[m
+[32m+[m[32m) fairly_active_users[m
+[32m+[m[32mCROSS JOIN ([m
+[32m+[m[32m  SELECT ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM average_steps_table), 2) AS very_active_percentage FROM average_steps_table WHERE average_steps >= 10000[m
+[32m+[m[32m) very_active_users;[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m### 📝 Method 2: Using CASE Statement[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH average_steps_table AS ([m
+[32m+[m[32m    SELECT Id, ROUND(AVG(TotalSteps), 2) AS average_steps[m
+[32m+[m[32m    FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m    WHERE NOT (SedentaryMinutes = 1440 AND TotalDistance = 0 AND TotalSteps = 0)[m
+[32m+[m[32m    GROUP BY Id[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m
+[32m+[m[32m  ROUND(SUM(CASE WHEN average_steps < 5000 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS sedentary_active_percentage,[m
+[32m+[m[32m  ROUND(SUM(CASE WHEN average_steps BETWEEN 5000 AND 7499 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS lightly_active_percentage,[m
+[32m+[m[32m  ROUND(SUM(CASE WHEN average_steps BETWEEN 7500 AND 9999 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS fairly_active_percentage,[m
+[32m+[m[32m  ROUND(SUM(CASE WHEN average_steps >= 10000 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS very_active_percentage[m
+[32m+[m[32mFROM average_steps_table;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Sedentary Users:** 37.14%[m[41m  [m
+[32m+[m[32m✅ **Lightly Active Users:** 20.0%[m[41m  [m
+[32m+[m[32m✅ **Fairly Active Users:** 22.86%[m[41m  [m
+[32m+[m[32m✅ **Very Active Users:** 20.0%[m[41m  [m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 4️⃣ Hourly Steps per Weekday[m
+[32m+[m[32m```[m
+[32m+[m[32mSELECT[m
+[32m+[m[32m  Id,[m
+[32m+[m[32m  FORMAT_TIMESTAMP('%A', ActivityHour) AS week_day,[m
+[32m+[m[32m  EXTRACT(DAYOFWEEK FROM ActivityHour) AS week_day_num,[m[41m  [m
+[32m+[m[32m  ROUND(AVG(StepTotal),2) AS avg_steps,[m
+[32m+[m[32m  EXTRACT(HOUR FROM ActivityHour) AS day_hour[m
+[32m+[m[32mFROM `spheric-engine-432411-p0.case_study_2.hourly_steps`[m
+[32m+[m[32mGROUP BY Id, week_day, week_day_num, day_hour[m
+[32m+[m[32mORDER BY week_day_num, day_hour ASC;[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 5️⃣ Correlation Between Steps, Sleep, and Calories[m
+[32m+[m[32m```[m
+[32m+[m[32mWITH steps_table AS ([m
+[32m+[m[32m  SELECT[m
+[32m+[m[32m    Id,[m
+[32m+[m[32m    FORMAT_TIMESTAMP('%A', ActivityHour) AS week_day,[m
+[32m+[m[32m    EXTRACT(DAYOFWEEK FROM ActivityHour) AS week_day_num,[m
+[32m+[m[32m    ROUND(AVG(StepTotal), 2) AS avg_steps_per_hour,[m
+[32m+[m[32m    SUM(StepTotal) AS total_daily_steps,[m
+[32m+[m[32m    EXTRACT(DATE FROM ActivityHour) AS activity_date[m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.hourly_steps`[m
+[32m+[m[32m  GROUP BY Id, week_day, week_day_num, activity_date[m
+[32m+[m[32m),[m
+[32m+[m[32msleep_table AS ([m
+[32m+[m[32m  SELECT[m
+[32m+[m[32m    Id,[m
+[32m+[m[32m    FORMAT_TIMESTAMP('%A', date) AS week_day,[m
+[32m+[m[32m    EXTRACT(DAYOFWEEK FROM date) AS week_day_num,[m
+[32m+[m[32m    SUM(value) AS total_sleep_minutes,[m
+[32m+[m[32m    EXTRACT(DATE FROM date) AS sleep_date[m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.minute_sleep`[m
+[32m+[m[32m  GROUP BY Id, week_day, week_day_num, sleep_date[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT[m
+[32m+[m[32m  steps_table.Id,[m
+[32m+[m[32m  steps_table.week_day,[m
+[32m+[m[32m  steps_table.week_day_num,[m
+[32m+[m[32m  steps_table.total_daily_steps,[m
+[32m+[m[32m  sleep_table.total_sleep_minutes[m
+[32m+[m[32mFROM steps_table[m
+[32m+[m[32mLEFT JOIN sleep_table[m
+[32m+[m[32mON steps_table.Id = sleep_table.Id AND steps_table.activity_date = sleep_table.sleep_date[m
+[32m+[m[32mORDER BY steps_table.week_day_num;[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m
+[32m+[m[32m## 5️⃣ Device Usage Distribution (Low, Moderate, High Use)[m
+[32m+[m[32m```sql[m
+[32m+[m[32mWITH user_usage_counts AS ([m
+[32m+[m[32m  SELECT Id, COUNT(*) AS usage_count[m
+[32m+[m[32m  FROM `spheric-engine-432411-p0.case_study_2.daily_activity_cleaned`[m
+[32m+[m[32m  GROUP BY Id[m
+[32m+[m[32m),[m
+[32m+[m[32musage_levels AS ([m
+[32m+[m[32m  SELECT Id,[m
+[32m+[m[32m    CASE[m[41m [m
+[32m+[m[32m      WHEN usage_count >= 45 THEN 'High Use'[m
+[32m+[m[32m      WHEN usage_count BETWEEN 16 AND 44 THEN 'Moderate Use'[m
+[32m+[m[32m      ELSE 'Low Use'[m
+[32m+[m[32m    END AS usage_level[m
+[32m+[m[32m  FROM user_usage_counts[m
+[32m+[m[32m)[m
+[32m+[m[32mSELECT usage_level, COUNT(*) AS count, ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM usage_levels), 2) AS percentage[m
+[32m+[m[32mFROM usage_levels[m
+[32m+[m[32mGROUP BY usage_level[m
+[32m+[m[32mORDER BY percentage DESC;[m
+[32m+[m[32m```[m
+[32m+[m[32m✅ **Low Use:** 5.71%[m[41m  [m
+[32m+[m[32m✅ **Moderate Use:** 77.15%[m[41m  [m
+[32m+[m[32m✅ **High Use:** 17.14%[m
+[32m+[m
+[32m+[m[32m---[m
+[1mdiff --git a/LICENSE.md b/LICENSE.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..71726ee[m
+[1m--- /dev/null[m
+[1m+++ b/LICENSE.md[m
+[36m@@ -0,0 +1,12 @@[m
+[32m+[m[32m## 📜 License ##[m
+[32m+[m
+[32m+[m[32mThis project utilizes datasets that are licensed under the **Creative Commons CC0 1.0 Universal (Public Domain Dedication)**.[m
+[32m+[m
+[32m+[m[32mUnder this license:[m
+[32m+[m[32m- The data is **free to use, modify, and distribute** for any purpose, including commercial and non-commercial use.[m
+[32m+[m[32m- No **attribution or permission** is required to use the data.[m
+[32m+[m[32m- The original authors have **waived all rights** to the extent allowed by law.[m
+[32m+[m
+[32m+[m[32mFor more details, please refer to the **full license text** here:[m[41m  [m
+[32m+[m[32m🔗 [Creative Commons CC0 1.0 Universal (Public Domain Dedication)](https://creativecommons.org/publicdomain/zero/1.0/)[m
+[32m+[m
+[1mdiff --git a/README.md b/README.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..437111d[m
+[1m--- /dev/null[m
+[1m+++ b/README.md[m
+[36m@@ -0,0 +1,252 @@[m
+[32m+[m[32m## Case Study 2: How Can a Wellness Technology Company Play It Smart? ##[m
+[32m+[m
+[32m+[m[32m**Company name: BellaBeat**[m
+[32m+[m
+[32m+[m[32m**Author: Tarek Abou Ismail**[m
+[32m+[m
+[32m+[m[32m**Date: 05/01/2025**[m
+[32m+[m
+[32m+[m[32m## 📝 Introduction ##[m
+[32m+[m
+[32m+[m[32mBellabeat is a high-tech company specializing in health-focused smart products designed for women. These products collect valuable data on activity, sleep, stress, and reproductive health, empowering women with insights to better understand their health and habits.[m
+[32m+[m
+[32m+[m[32mAs part of the capstone project for the Google Data Analytics Professional Certificate, this case study aims to address the business question: ***"How are consumers using Bellabeat smart devices?"***. To gain meaningful insights, the project will analyze fitness data from smart devices while following the steps of the data analysis process: ***Ask, Prepare, Process, Analyze, Share,*** and ***Act***.[m
+[32m+[m
+[32m+[m[32m## Background ##[m
+[32m+[m
+[32m+[m[32m**About the Company**[m
+[32m+[m
+[32m+[m[32mFounded in 2013 by Urška Sršen and Sando Mur, Bellabeat is a high-tech company specializing in health-focused smart products for women. Leveraging Sršen's artistic background, Bellabeat creates beautifully designed devices that empower women with insights into their health and habits by tracking activity, sleep, stress, and reproductive health.[m
+[32m+[m
+[32m+[m[32mSince its founding, Bellabeat has grown rapidly, expanding globally, launching multiple products, and offering them through online retailers and its own e-commerce platform. The company combines traditional advertising (radio, billboards, TV) with a strong focus on digital marketing, including active engagement on Facebook, Instagram, and Twitter, as well as campaigns on YouTube and Google.[m
+[32m+[m
+[32m+[m[32mTo uncover growth opportunities, Sršen has tasked the marketing analytics team with analyzing smart device usage data. The goal is to ***identify trends in consumer behavior and provide recommendations to refine Bellabeat’s marketing strategy***.[m
+[32m+[m
+[32m+[m[32m## ⚙ Approach ##[m
+[32m+[m
+[32m+[m[32m**1. Ask / Business Objective and Key Questions**[m
+[32m+[m
+[32m+[m[32m**1.1 Business Task**[m
+[32m+[m
+[32m+[m[32mAnalyze smart device fitness data to uncover growth opportunities, identify trends in consumer behavior, and provide actionable recommendations to refine Bellabeat’s marketing strategy.[m
+[32m+[m
+[32m+[m[32m> **1.2 Guiding Questions**[m
+[32m+[m[32m> 1. What are some trends in smart device usage?[m
+[32m+[m[32m> 2. How could these trends apply to Bellabeat customers?[m
+[32m+[m[32m> 3. How could these trends help influence Bellabeat marketing strategy?[m
+[32m+[m
+[32m+[m[32m**1.3 Stakeholders**[m
+[32m+[m[32m- Urška Sršen: Bellabeat’s cofounder and Chief Creative Officer.[m
+[32m+[m[32m- Sando Mur: Bellabeat’s cofounder; key member of the Bellabeat executive team.[m
+[32m+[m[32m- Bellabeat marketing analytics team.[m
+[32m+[m
+[32m+[m[32m**2. Prepare**[m
+[32m+[m
+[32m+[m[32m**2.1 Data Overview**[m
+[32m+[m
+[32m+[m[32mThese datasets were generated by respondents to a distributed survey via Amazon Mechanical Turk. Thirty eligible Fitbit users consented to the submission of personal tracker data, including minute-level output for physical activity, heart rate, and sleep monitoring. Variation between output represents use of different types of Fitbit trackers and individual tracking behaviors / preferences.[m
+[32m+[m
+[32m+[m[32m**2.2 Source**[m
+[32m+[m
+[32m+[m[32mThe dataset used for this case study is the [FitBit Fitness Tracker Data](https://www.kaggle.com/datasets/arashnic/fitbit), sourced from Kaggle. It is publicly available through [Möbius](https://www.kaggle.com/arashnic) and licensed under the [CC0: Public Domain](https://creativecommons.org/publicdomain/zero/1.0/) license. You can access the dataset directly via this FitBit Fitness Tracker Data link.[m
+[32m+[m
+[32m+[m[32m**2.3 Data Structure**[m
+[32m+[m
+[32m+[m[32mThe dataset is divided into two distinct periods:[m
+[32m+[m
+[32m+[m[32m03/12/2016 – 04/11/2016 contain 11 CSV files.[m
+[32m+[m
+[32m+[m[32m| Table Name                  | Type                 | Description |[m
+[32m+[m[32m|-----------------------------|----------------------|-------------|[m
+[32m+[m[32m| daily_activity_1            | Microsoft Excel CSV  | Daily activity tracking for 35 users from **03/12/2016 – 04/11/2016**. Tracks steps, distance, intensities, and calories. |[m
+[32m+[m[32m| heart_rate_seconds_1        | Microsoft Excel CSV  | Heart rate logs recorded every second for the 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| hourly_calories_1           | Microsoft Excel CSV  | Hourly calories burned for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| hourly_intensities_1        | Microsoft Excel CSV  | Hourly total and average intensity levels for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| hourly_steps_1              | Microsoft Excel CSV  | Hourly step count for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| minute_calories_narrow_1    | Microsoft Excel CSV  | Minute-level calorie tracking for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| minute_intensities_narrow_1 | Microsoft Excel CSV  | Minute-level intensity tracking for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| minute_mets_narrow_1        | Microsoft Excel CSV  | Minute-level MET (Metabolic Equivalent Task) tracking for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| minute_sleep_1              | Microsoft Excel CSV  | Minute-by-minute sleep tracking for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| minute_sleep_1_v1           | Microsoft Excel CSV  | Version 1 of minute-by-minute sleep tracking, possibly refined or adjusted, from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| minute_steps_narrow_1       | Microsoft Excel CSV  | Minute-level step tracking for 35 users from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m[32m| weight_log_info_1           | Microsoft Excel CSV  | Weight log entries for 35 users, including weight measurements and timestamps, from **03/12/2016 – 04/11/2016**. |[m
+[32m+[m
+[32m+[m
+[32m+[m[32m04/12/2016 – 05/12/2016 contain 18 CSV files.[m[41m [m
+[32m+[m
+[32m+[m[32m| Table Name                  | Type                 | Description |[m
+[32m+[m[32m|-----------------------------|----------------------|-------------|[m
+[32m+[m[32m| daily_activity_2            | Microsoft Excel CSV  | Daily activity tracking for 35 users from **04/12/2016 – 05/12/2016**. Tracks steps, distance, intensities, and calories. |[m
+[32m+[m[32m| daily_calories_2            | Microsoft Excel CSV  | Daily calorie expenditure for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| daily_intensities_2         | Microsoft Excel CSV  | Daily intensity levels for 35 users from **04/12/2016 – 05/12/2016**, categorized into Sedentary, Lightly Active, Fairly Active, and Very Active. |[m
+[32m+[m[32m| daily_steps_2               | Microsoft Excel CSV  | Daily step count for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| heart_rate_seconds_2        | Microsoft Excel CSV  | Second-by-second heart rate logs for a subset of users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| hourly_calories_2           | Microsoft Excel CSV  | Hourly calories burned for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| hourly_intensities_2        | Microsoft Excel CSV  | Hourly intensity levels for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| hourly_steps_2              | Microsoft Excel CSV  | Hourly step count for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_calories_narrow_2    | Microsoft Excel CSV  | Minute-level calorie tracking (narrow format) for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_calories_wide_2      | Microsoft Excel CSV  | Minute-level calorie tracking (wide format) for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_intensities_narrow_2 | Microsoft Excel CSV  | Minute-level intensity tracking (narrow format) for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_intensities_wide_2   | Microsoft Excel CSV  | Minute-level intensity tracking (wide format) for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_mets_narrow_2        | Microsoft Excel CSV  | Minute-level MET (Metabolic Equivalent Task) tracking for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_sleep_2              | Microsoft Excel CSV  | Minute-by-minute sleep tracking for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_sleep_2_v1           | Microsoft Excel CSV  | Version 1 of minute-by-minute sleep tracking, possibly refined, from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_steps_narrow_2       | Microsoft Excel CSV  | Minute-level step tracking (narrow format) for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| minute_steps_wide_2         | Microsoft Excel CSV  | Minute-level step tracking (wide format) for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| sleep_day_2                 | Microsoft Excel CSV  | Summary of sleep data for 35 users from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m[32m| weight_log_info_2           | Microsoft Excel CSV  | Weight log entries for 35 users, including weight measurements and timestamps, from **04/12/2016 – 05/12/2016**. |[m
+[32m+[m
+[32m+[m
+[32m+[m[32mData is considered long format.[m[41m [m
+[32m+[m
+[32m+[m[32m**2.4 Data Integrity And Credibility**[m
+[32m+[m
+[32m+[m[32mThe dataset's integrity and credibility were assessed using the ROCCC framework:[m
+[32m+[m
+[32m+[m[32m- Relevant: The dataset is a great fit for our analysis goals, as it offers valuable insights into user activity and behavior.[m
+[32m+[m[32m- Original: Since the data was gathered directly from users via a survey, it counts as primary data.[m
+[32m+[m[32m- Comprehensive: While the dataset provides useful information, it’s limited to just 35 users and only covers a two-month period. Additionally, it doesn’t include any geographical details, which could have added more depth.[m
+[32m+[m[32m- Current: Unfortunately, the dataset is a bit outdated and doesn’t capture recent trends or shifts in user behavior.[m
+[32m+[m[32m- Credible: On the plus side, the dataset comes from Kaggle, a well-known and reliable platform for sharing data, which adds to its credibility.[m
+[32m+[m
+[32m+[m
+[32m+[m[32m**3. Data Exploring, Combining and Preparing**[m
+[32m+[m
+[32m+[m[32m**3.1 Tools**[m
+[32m+[m[32m- Data cleaning and processing: Bigquery and PostgreSQL.[m
+[32m+[m[32m- Data visualization: PowerBI and Tableau[m
+[32m+[m
+[32m+[m[32m**3.2 Data Combining**[m
+[32m+[m
+[32m+[m[32mDuring the data consolidation phase, I combined the two months' worth of data into unified tables to streamline the analysis process. Specifically, I merged the data from daily_activity_1 (covering the period from March 12, 2016, to April 11, 2016) and daily_activity_2 (covering April 12, 2016, to May 12, 2016) into a single table named daily_activity. I also combined the data from minute_sleep_1_v1 and minute_sleep_2_v1 into a new table called minute_sleep. However, due to some formatting inconsistencies in the date columns, I first had to upload both tables to Google Sheets, fix the formatting issues, and then download them again before merging. Finally, I unified the records from hourly_steps_1 and hourly_steps_2 into a single table named hourly_steps. This allowed me to analyze all step activity data from the two-month period in one place.[m
+[32m+[m
+[32m+[m[32m**3.4 Data Exploring**[m
+[32m+[m
+[32m+[m[32mIn the data exploration phase, I performed various checks to assess the quality and consistency of the data across the tables daily_activity, minute_sleep, and hourly_steps.[m
+[32m+[m
+[32m+[m[32m*a. Exploring the Daily Activity Table:*[m
+[32m+[m
+[32m+[m[32mI examined the daily_activity table for potential null values across columns, data consistency, and duplicates. The results showed no null values, duplicate records, or data inconsistencies.[m
+[32m+[m
+[32m+[m[32mI ensured that the ActivityDate values were within the specified date range and found no inconsistencies or values outside the expected range.[m
+[32m+[m
+[32m+[m[32mI reviewed key activity-related columns like TotalSteps, Calories, and various distance measures to confirm they had no null or negative values and no inconsistencies in data formatting.[m
+[32m+[m
+[32m+[m[32m*b. Exploring the Minute Sleep Table:*[m
+[32m+[m
+[32m+[m[32mI explored the minute_sleep table for data format inconsistencies, particularly checking the date field for correct timestamp formatting. I found that the year 2016 was incorrectly represented as "0016" in some entries, which was flagged for correction.[m
+[32m+[m
+[32m+[m[32m*c. Reviewing the Hourly Steps Table:*[m
+[32m+[m
+[32m+[m[32mSimilar checks were performed on the hourly_steps table, including a review of the ActivityHour field, where the year "2016" had been incorrectly imported as "0016." This was noted for correction.[m
+[32m+[m
+[32m+[m[32m**3.5 Data Preparing**[m
+[32m+[m
+[32m+[m[32mIn the data preparation phase, several tasks were performed to clean and organize the data. First, a new table was created (daily_activity_cleaned) by removing 17 Invalid records were removed where users were sedentary but still recorded movement. Then, user activity data was categorized into four groups based on average steps: sedentary, lightly active, fairly active, and very active users, and separate tables were created for each group. In addition, date format inconsistencies in the minute_sleep and hourly_steps tables were corrected. Finally, the average minutes of sleep per weekday were calculated and displayed for each user.[m
+[32m+[m
+[32m+[m[32m**4. Data Analysis**[m
+[32m+[m
+[32m+[m[32m*4.1 Users count*[m
+[32m+[m
+[32m+[m[32m35 users were identified.[m
+[32m+[m
+[32m+[m[32m*4.2 Average daily steps and calories*[m
+[32m+[m
+[32m+[m[32m![image](https://github.com/user-attachments/assets/4a376b4a-ddea-465e-b97a-796149e892d4)[m
+[32m+[m
+[32m+[m[32mThe visualization includes two bar charts. The first chart, titled "Average Daily Steps," reveals that the average step count per day ranges from 6,200 to 7,600 steps across the week. This is below the widely recommended target of 10,000 steps per day, a benchmark often associated with health benefits like improved fitness and reduced risk of chronic diseases.  As noted by the [CDC](https://www.cdc.gov/physical-activity-basics/guidelines/adults.html?CDC_AAref_Val=https://www.cdc.gov/physicalactivity/basics/adults/index.htm), walking 10,000 steps daily is a well-established goal for maintaining an active lifestyle.[m
+[32m+[m
+[32m+[m[32mThe second chart, "Average Daily Calories," shows that the average calories burned each day fall between 2,100 and 2,400. This aligns with general caloric guidelines for adults. According to the [U.S. Department of Health and Human Services](https://www.fda.gov/media/112972/download?utm_source=chatgpt.com), adult women typically need between 1,600 and 2,400 calories per day, while adult men require 2,000 to 3,000 calories daily, depending on factors like age, sex, and activity level. These findings suggest that while step counts may fall short of the ideal target, calorie expenditure remains within a healthy range for most adults.[m
+[32m+[m
+[32m+[m[32m*4.3 Type of users based on activity level*[m
+[32m+[m
+[32m+[m[32m![image](https://github.com/user-attachments/assets/df55bef6-5f85-456f-956a-a7f1c8254e1e)[m
+[32m+[m
+[32m+[m
+[32m+[m[32mThis chart breaks down users into four activity-level categories: **Fairly Active**, **Very Active**, **Lightly Active**, and **Sedentary Active**. The data reveals that the largest group is **Sedentary Active users**, making up 28.57% of the total. Following closely, **Fairly Active users** represent 25.71%. Meanwhile, both **Very Active** and **Lightly Active users** are tied at 22.86% each. This distribution highlights that a significant portion of users fall into the less active categories, with nearly a third being sedentary and only about a quarter being fairly or very active. The categories in the chart correspond to [commonly used classifications for physical activity levels](https://pmc.ncbi.nlm.nih.gov/articles/PMC3169444/?utm_source=chatgpt.com) which are:[m
+[32m+[m
+[32m+[m[32m- **Sedentary**: Less than 5,000 steps per day.[m
+[32m+[m[32m- **Lightly active**: Between 5,000 and 7,499 steps per day.[m
+[32m+[m[32m- **Fairly active**: Between 7,500 and 9,999 steps per day.[m
+[32m+[m[32m- **Very active**: More than 10,000 steps per day.[m
+[32m+[m
+[32m+[m[32m*4.4 Average steps per hour*[m
+[32m+[m
+[32m+[m[32m![image](https://github.com/user-attachments/assets/a750848b-aaa6-4c2a-9f3c-cdc65e88bee4)[m
+[32m+[m
+[32m+[m[32mThis chart displays the average number of steps users take over a 24-hour period. The x-axis represents the hours of the day (from 1 to 24), while the y-axis shows the average step count. The data reveals clear patterns in user activity, with noticeable spikes in movement during the morning and evening hours—times when people are typically most active. Conversely, step counts dip significantly during late-night and early-morning hours, reflecting lower activity levels. This visualization effectively pinpoints when users are at their most and least active throughout the day.[m
+[32m+[m
+[32m+[m[32m*4.5 Steps, minutes sleep and caloris*[m
+[32m+[m
+[32m+[m[32mDaily Steps vs Minutes Sleep[m
+[32m+[m
+[32m+[m[32m![image](https://github.com/user-attachments/assets/912dc09d-4490-467c-827e-a6568f65c838)[m
+[32m+[m
+[32m+[m[32mThe chart reveals no significant correlation between the two variables—**Daily Steps** and **Minutes Sleep**—indicating that increased walking doesn’t necessarily result in more or less sleep.[m[41m [m
+[32m+[m
+[32m+[m[32m**Key observations:**[m[41m  [m
+[32m+[m[32m- Most data points cluster within the range of **3,000 to 12,000 steps** and **5 to 10 hours of sleep**.[m[41m  [m
+[32m+[m[32m- The trend line is nearly flat, showing that step count has little to no effect on sleep duration.[m[41m  [m
+[32m+[m[32m- At higher step counts (above 20,000 steps), sleep duration becomes more varied, but no consistent pattern emerges.[m[41m  [m
+[32m+[m
+[32m+[m[32mIn short, the data suggests that daily step count doesn’t have a strong influence on how long people sleep.[m
+[32m+[m
+[32m+[m[32mDaily Steps vs Calories[m
+[32m+[m
+[32m+[m[32m![image](https://github.com/user-attachments/assets/d945eab3-df3a-4593-86ef-7e732a6a3d4e)[m
+[32m+[m
+[32m+[m[32mDaily Steps vs. Daily Calories[m
+[32m+[m
+[32m+[m[32mThe chart reveals a positive correlation, where more steps generally lead to higher calorie expenditure.[m
+[32m+[m
+[32m+[m[32mKey observations:[m
+[32m+[m[32m- The biggest jump in calories burned happens when users take between 5,000 and 15,000 steps.[m
+[32m+[m[32m- Once step counts go beyond 15,000, the rate of calorie burning starts to slow down, showing diminishing returns.[m
+[32m+[m[32m- The data indicates that moderate activity levels (within the 5K–15K step range) are the most effective for boosting calorie expenditure.[m
+[32m+[m
+[32m+[m[32mIn other words, while increasing steps up to 15,000 significantly boosts calorie burn, pushing beyond that point yields smaller gains, making moderate activity the sweet spot for efficiency.[m
+[32m+[m
+[32m+[m[32m*4.6 Smart device usage patterns*[m[41m [m
+[32m+[m
+[32m+[m[32m![image](https://github.com/user-attachments/assets/a55060db-ecf5-4843-8249-717605541507)[m
+[32m+[m
+[32m+[m
+[32m+[m[32mThis pie chart represents the distribution of smart device usage over the given period (12.03.2016 to 12.05.2016), categorized into three levels:[m
+[32m+[m
+[32m+[m[32m- Low use (0 to 15 days) – 5.71% (Red) → Bottom 25% of users[m
+[32m+[m[32m- Moderate use (16 to 44 days) – 77.15% (Blue) → Middle 50% of users[m
+[32m+[m[32m- High use (45 to 60 days) – 17.14% (Green) → Top 25% of users[m
+[32m+[m[41m  [m
+[32m+[m[32mKey observation:[m
+[32m+[m
+[32m+[m[32m- The majority of users fall into the moderate usage category (16-44 days), making up the middle 50% of the dataset.[m
+[32m+[m[32m- The high-use category (45 to 60 days) represents the top 25% of users, indicating that only a quarter of users engage frequently with their smart devices.[m
+[32m+[m[32m- The low-use category (0-15 days) accounts for the lower 25%, showing minimal interaction with the device.[m
+[32m+[m
+[32m+[m[32m**5. Conclusion (Act Phase)**[m
+[32m+[m
+[32m+[m[32m| Strategy                      | Why?                                                      | Action Steps[m[41m                                                          [m
+[32m+[m[32m|--------------------------------|----------------------------------------------------------|----------------------------------------------------------------------------|[m
+[32m+[m[32m| Gamification & Rewards        | 77.15% of users are moderate users; need motivation to stay engaged. | Introduce daily challenges, badges, and leaderboards to encourage activity. |[m
+[32m+[m[32m| Personalized Notifications    | 28.57% of users are sedentary; need behavior-based nudges. | Implement AI-powered "Move Now" reminders and adaptive sleep alerts.         |[m
+[32m+[m[32m| Targeted Marketing Campaigns  | Low-use users (5.71%) may churn quickly.                 | Send re-engagement emails, offer premium content, and partner with influencers. |[m
+[32m+[m[32m| AI Coaching for Steps & Sleep | No strong correlation between steps and sleep; users need better guidance. | Launch personalized fitness & sleep plans with expert-backed recommendations. |[m[41m [m
+[32m+[m[32m| Expand Data Collection        | Current dataset is outdated (2016) and small (30 users). | Collect real-time Bellabeat user data and conduct surveys on engagement trends. |[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
